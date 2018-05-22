@@ -51,13 +51,23 @@ key_bk$set_with_value("myservice", "myuser", "pass2", "new_keyring")
 key_bk$set_with_value("myservice", "myuser2", "pass", "new_keyring")
 key_bk$keyring_list()
 key_bk$list("myservice", "new_keyring")
+
+key_bk$get("myservice", "myuser", "new_keyring")
 ```
 
 We can also delete the keyring when no longer necessary.
 
 ```{r}
-# key_bk$keyring_delete("new_keyring")
-key_bk$confirm_delete_keyring("new_keyring")
+key_bk$delete("myservice","myuser","new_keyring")
+key_bk$delete("myservice", "myuser2", "new_keyring")
+key_bk$keyring_delete("new_keyring")
 ```
+
+And then confirm that it is gone:
+
+```{r}
+key_bk$keyring_list()
+```
+
 
 
