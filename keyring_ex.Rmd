@@ -1,0 +1,63 @@
+---
+title: "Keyring Integrations"
+output: html_notebook
+---
+
+The `keyring` package enables accessing the operating system's credential store.
+
+```{r}
+library(keyring)
+key_bk <- default_backend()
+```
+
+For instance, you can see all keyrings with the `list_keyring` command.
+
+```{r}
+key_bk$keyring_list()
+```
+
+The "login" keyring is automatically unlocked when you login, which is helpful to accessing credentials naturally.  You can use this keyring by default without hassle, or create one of your own.  When you do so, you will be prompted for a password that locks / unlocks the keyring
+
+```{r}
+key_bk$keyring_create("new_keyring")
+key_bk$keyring_list()
+```
+
+Once you decide on a keyring, you can store credentials in it... when doing so, you will be prompted for the password for the item you are storing.
+
+```{r}
+key_bk$set("myservice", "myuser", "new_keyring")
+key_bk$keyring_list()
+key_bk$list("myservice", "new_keyring")
+```
+
+If you lock the keyring, credentials are not accessible without the keyring password.
+
+```{r}
+key_bk$keyring_lock("new_keyring")
+key_bk$keyring_is_locked("new_keyring")
+key_bk$list("new_keyring")
+```
+
+Once unlocked (requires password), you can add, change, and access credentials.
+
+```{r}
+key_bk$keyring_unlock("new_keyring")
+key_bk$keyring_is_locked("new_keyring")
+```
+
+```{r}
+key_bk$set_with_value("myservice", "myuser", "pass2", "new_keyring")
+key_bk$set_with_value("myservice", "myuser2", "pass", "new_keyring")
+key_bk$keyring_list()
+key_bk$list("myservice", "new_keyring")
+```
+
+We can also delete the keyring when no longer necessary.
+
+```{r}
+# key_bk$keyring_delete("new_keyring")
+key_bk$confirm_delete_keyring("new_keyring")
+```
+
+
